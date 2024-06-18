@@ -1,0 +1,17 @@
+Example 1:
+Background: No background
+User query: Create a new board named "Project A".
+API calling 1: POST /1/boards/ with parameters name="Project A", key="41c8afc07e61972432b1a25f9fca72b2", token="ATTAd987eb5803622814e480ea22c2a4fdcc29c999fe66a5ad5e5c12ec36f4348238275C769C"
+API response: New board "Project A" created with id "5f3d456f8a147a263458e8d5"
+
+Example 2:
+Background: The board "Project A" has an id of "5f3d456f8a147a263458e8d5"
+User query: Create a label named "In Progress" with color blue for the board "Project A".
+API calling 1: POST /1/boards/5f3d456f8a147a263458e8d5/labels with parameters name="In Progress", color="blue", key="41c8afc07e61972432b1a25f9fca72b2", token="ATTAd987eb5803622814e480ea22c2a4fdcc29c999fe66a5ad5e5c12ec36f4348238275C769C"
+API response: New label "In Progress" created with color "blue" for the board "Project A"
+
+Example 3:
+Background: The board "Project A" has an id of "5f3d456f8a147a263458e8d5"
+User query: Update the name of board "Project A" to "Project X".
+API calling 1: PUT /1/boards/5f3d456f8a147a263458e8d5 with parameters name="Project X", key="41c8afc07e61972432b1a25f9fca72b2", token="ATTAd987eb5803622814e480ea22c2a4fdcc29c999fe66a5ad5e5c12ec36f4348238275C769C"
+API response: Board with id "5f3d456f8a147a263458e8d5" updated successfully. New name "Project X"
