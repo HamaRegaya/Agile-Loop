@@ -1,7 +1,10 @@
 pyyaml==6.0.1
 spotipy==2.23.0
-langchain==0.0.315
+langchain==0.2.5
 colorama==0.4.6
 tiktoken==0.5.1
 openai==0.28.1
-mysql-connector-pythone
+langchain-groq==0.1.5
+mysql-connector-python
+langchain-community== 0.2.5
+langchain-openai==0.1.8

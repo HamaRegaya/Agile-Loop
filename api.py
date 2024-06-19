@@ -4,6 +4,8 @@ import random
 import os
 logger = logging.getLogger()
 from fastapi import FastAPI, status, Query, Depends
+from langchain_groq import ChatGroq
+from langchain_openai import AzureChatOpenAI
 
 app = FastAPI()
 
@@ -71,8 +73,18 @@ async def handle_interaction(
     populate_planner_icl_examples(scenario=scenario)
     
     requests_wrapper = Requests(headers=headers)
-    
-    llm = OpenAI(model_name="gpt-3.5-turbo", temperature=0.0, max_tokens=700)
+    # llm = ChatGroq(
+    # temperature=0,
+    # model="llama3-70b-8192",
+    # api_key="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" # Optional if not set as an environment variable
+    # )
+    #llm = OpenAI(model_name="gpt-3.5-turbo", temperature=0.0, max_tokens=700)
+    llm = AzureChatOpenAI(
+        azure_deployment=config['azure_deployment'],
+        azure_endpoint=config['azure_endpoint'],
+        api_key=config['api_key'],
+        api_version=config['api_version'],
+        temperature=0)
     api_llm = ApiLLM(
         llm,
         api_spec=api_spec,
