@@ -1,7 +1,9 @@
 # Virtual environment
+.venv/
 env/
-dir/env/
-
+venv/
+dir/.venv/
+config.yaml
 # Byte-compiled / optimized / DLL files
 **/__pycache__/
 __pycache__/

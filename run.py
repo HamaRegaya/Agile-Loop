@@ -4,6 +4,9 @@ import random
 import os
 import tkinter as tk
 from tkinter import simpledialog, messagebox
+from langchain_core.prompts import ChatPromptTemplate
+from langchain_groq import ChatGroq
+from langchain_openai import AzureChatOpenAI
 
 
 logger = logging.getLogger()
@@ -15,7 +18,6 @@ def main():
     root.geometry("400x250")
 
     config = yaml.load(open("config.yaml", "r"), Loader=yaml.FullLoader)
-    os.environ["OPENAI_API_KEY"] = config["openai_api_key"]
 
     logging.basicConfig(
         format="%(message)s",
@@ -266,8 +268,22 @@ def main():
     requests_wrapper = Requests(headers=headers)
 
     # text-davinci-003
+    
 
-    llm = OpenAI(model_name="gpt-3.5-turbo", temperature=0.0, max_tokens=1024)
+    # llm = ChatGroq(
+    # temperature=0,
+    # model="llama3-70b-8192",
+    # api_key="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" # Optional if not set as an environment variable
+    # )
+    llm = AzureChatOpenAI(
+        azure_deployment=config['azure_deployment'],
+        azure_endpoint=config['azure_endpoint'],
+        api_key=config['api_key'],
+        api_version=config['api_version'],
+        temperature=0)
+    
+
+    #llm = OpenAI(model_name="gpt-3.5-turbo", temperature=0.0, max_tokens=1024)
     api_llm = ApiLLM(
         llm,
         api_spec=api_spec,
