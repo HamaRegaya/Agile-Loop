@@ -1,0 +1,31 @@
+#create a yaml directory and file named config.yaml  inside it  and copy the below content to it and fill in the values for the keys with the respective values 
+
+openai_api_key: "YOUR OPENAI KEY"
+
+tmdb_access_token: "YOUR TMDB ACCESS TOKEN"
+
+YOUR_SCENARIO_KEY: "YOUR SCENARIO KEY HERE"
+YOUR_SCENARIO_SECRET_IF_ANY: "YOUR SCENARIO SECRET HERE"
+
+spotipy_client_id: ""
+spotipy_client_secret: ""
+spotipy_redirect_uri: ""
+
+NOTION_KEY: ""
+NOTION_PAGE_ID: ""
+NOTION_VERSION: ""
+
+UPCLICK_KEY: ""
+
+discord_client_id: ""
+discord_client_secret: ""
+discord_redirect_uri: ""
+GROQ_API_KEY: ""
+google_token: ""
+trello_key: ""
+trello_token: ""
+
+azure_deployment: ""
+azure_endpoint: ""
+api_key: ""
+api_version: ""

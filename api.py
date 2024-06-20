@@ -32,7 +32,7 @@ async def handle_interaction(
     validated_credentials: bool = Depends(validate_credentials),
     query: str = Query(..., description="The query related to the scenario")
 ):
-    config = yaml.load(open("config.yaml", "r"), Loader=yaml.FullLoader)
+    config = yaml.load(open("yaml/config.yaml", "r"), Loader=yaml.FullLoader)
     os.environ["OPENAI_API_KEY"] = config["openai_api_key"]
 
     logging.basicConfig(
@@ -75,8 +75,9 @@ async def handle_interaction(
     requests_wrapper = Requests(headers=headers)
     # llm = ChatGroq(
     # temperature=0,
-    # model="llama3-70b-8192",
-    # api_key="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" # Optional if not set as an environment variable
+    # model="llama3-8b-8192",
+    # api_key=config['GROQ_API_KEY'] # Optional if not set as an environment variable
+    
     # )
     #llm = OpenAI(model_name="gpt-3.5-turbo", temperature=0.0, max_tokens=700)
     llm = AzureChatOpenAI(

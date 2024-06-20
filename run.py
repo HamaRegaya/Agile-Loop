@@ -17,7 +17,7 @@ def main():
     root.withdraw()  # Hide the root window
     root.geometry("400x250")
 
-    config = yaml.load(open("config.yaml", "r"), Loader=yaml.FullLoader)
+    config = yaml.load(open("yaml/config.yaml", "r"), Loader=yaml.FullLoader)
 
     logging.basicConfig(
         format="%(message)s",
@@ -272,8 +272,8 @@ def main():
 
     # llm = ChatGroq(
     # temperature=0,
-    # model="llama3-70b-8192",
-    # api_key="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" # Optional if not set as an environment variable
+    # model="llama3-8b-8192",
+    # api_key=config['GROQ_API_KEY'] # Optional if not set as an environment variable
     # )
     llm = AzureChatOpenAI(
         azure_deployment=config['azure_deployment'],
