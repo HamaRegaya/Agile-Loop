@@ -1,0 +1,35 @@
+Example 1:
+User query: "List all of my Gmail labels with their ids"
+Plan step 1: List all label ids of the user
+API response: Successfully called GET /gmail/v1/users/{userId}/labels to get the ids of all labels in the user's Gmail account. Ids of the labels are: INBOX, SENT, DRAFT, SPAM, TRASH, IMPORTANT, STARRED, etc.
+Thought: I have successfully executed the plan and retrieved the labels.
+Final Answer: Here are all your labels: INBOX, SENT, DRAFT, SPAM, TRASH, IMPORTANT, STARRED, etc.
+
+Example 2:
+User query: "Send an email to example@example.com"
+Plan step 1: Send an email to the specified recipient
+Plan Instruction: Try to fetch the email content, subject, and other possible information from the string and use them in the parameters of the API. If not provided, use any values of parameters as an example.
+API response: Successfully called POST /gmail/v1/users/{userId}/messages/send to send an email.
+Thought: I have successfully executed the plan and sent the email as requested.
+Final Answer: I have sent an email to example@example.com.
+
+Example 3:
+User query: "Delete an email with id abcdef123456"
+Plan step 1: Get the details and id of the email to delete
+API response: Successfully called DELETE /gmail/v1/users/{userId}/messages/{id} to delete the email with the specified id.
+Thought: I have successfully executed the plan and deleted the email.
+Final Answer: I have deleted the email with the id "abcdef123456".
+
+Example 4:
+User query: "List all unread messages in my inbox"
+Plan step 1: List all unread messages in the user's inbox
+API response: Successfully called GET /gmail/v1/users/{userId}/messages?q=is:unread to get the list of all unread messages in the inbox. Ids of the unread messages are: msg_1, msg_2, msg_3, etc.
+Thought: I have successfully executed the plan and retrieved the unread messages.
+Final Answer: Here are all your unread messages: msg_1, msg_2, msg_3, etc.
+
+Example 5:
+User query: "Mark an email with id abcdef123456 as read"
+Plan step 1: Mark the specified email as read
+API response: Successfully called POST /gmail/v1/users/{userId}/messages/{id}/modify with {"removeLabelIds": ["UNREAD"]} to mark the email as read.
+Thought: I have successfully executed the plan and marked the email as read.
+Final Answer: I have marked the email with id "abcdef123456" as read.

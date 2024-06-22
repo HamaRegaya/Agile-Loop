@@ -1,0 +1,174 @@
+{
+	"openapi": "3.0.0",
+	"info": {
+	  "title": "Options title",
+	  "description": "Description from options",
+	  "version": "6.0.7-beta",
+	  "termsOfService": "http://tos.myweb.com"
+	},
+	"servers": [
+	  {
+		"url": "https://www.googleapis.com"
+	  },
+	  {
+		"url": "https://accounts.google.com"
+	  }
+	],
+	"components": {
+	  "securitySchemes": {
+		"bearerAuth": {
+		  "type": "http",
+		  "scheme": "bearer"
+		},
+		"oauth2Auth": {
+		  "type": "http",
+		  "scheme": "oauth2"
+		}
+	  }
+	},
+	"tags": [
+	  {
+		"name": "Gmail"
+	  }
+	],
+	"paths": {
+	"/gmail/v1/users/me/profile": {
+      "get": {
+        "tags": ["Gmail"],
+        "summary": "Gets the current user's Gmail profile.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      }
+    },"/gmail/v1/users/{userId}/messages/send": {
+  "post": {
+    "tags": ["Gmail"],
+    "summary": "Send Email",
+    "description": "Sends an email on behalf of the user.",
+    "requestBody": {
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "example": {
+              "raw": "base64url encoded"
+            }
+          }
+        }
+      }
+    },
+    "security": [
+      {
+        "bearerAuth": []
+      }
+    ],
+    "parameters": [
+      {
+        "name": "userId",
+        "in": "path",
+        "schema": {
+          "type": "string"
+        },
+        "required": true,
+        "description": "The user's email address. The special value 'me' can be used to indicate the authenticated user."
+      }
+    ],
+    "responses": {
+      "200": {
+        "description": "Successful response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "threadId": {
+                  "type": "string"
+                },
+                "labelIds": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+
+
+  ,"/o/oauth2/token": {
+      "post": {
+        "tags": ["default"],
+        "summary": "Refresh Token",
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "grant_type": {
+                    "type": "string",
+                    "example": "{{refresh_token}}"
+                  },
+                  "refresh_token": {
+                    "type": "string",
+                    "example": "{{refresh_token}}"
+                  },
+                  "client_id": {
+                    "type": "string",
+                    "example": "{{clientId}}"
+                  },
+                  "client_secret": {
+                    "type": "string",
+                    "example": "{{clientSecret}}"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "oauth2Auth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "application/x-www-form-urlencoded"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      }
+    }
+}
+}

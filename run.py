@@ -107,6 +107,32 @@ def main():
             file_path="specs/sheets_oas.json", token=os.environ["GOOGLE_TOKEN"]
         )
         query_example = 'Create a new Spreadsheet with title: "Exercise Logs". Print the complete api response result as it is.'
+    elif scenario == "gmail":
+        # if user_id is not None:
+        #     try:
+        #         ser_qu = f"SELECT * FROM credentials WHERE user_id = {user_id};"
+        #         cursor.execute(ser_qu)
+        #         res = cursor.fetchone()
+        #         res_t = res[2]
+        #         messagebox.showinfo("Information", f"your token {res_t}")
+        #         os.environ["GOOGLE_TOKEN"] = res_t
+        #         dic = {
+        #             "user_id": user_id,
+        #             "your_token": res_t
+        #         }
+        #         messagebox.showinfo("Information", dic)
+        #     except:
+        #         messagebox.showinfo("Information", "Key is not present in the database")
+        #         return ""
+
+        # else:
+        #     messagebox.showinfo("Information", "Your id is incorrect.")
+        os.environ["GOOGLE_TOKEN"] = config["google_token"]
+        api_spec, headers = process_spec_file(
+            file_path="specs/gmail_oas.json", token=os.environ["GOOGLE_TOKEN"]
+        )
+        query_example = "Send Email From: yahyasmt@gmail.com To: yahyasmt1@gmail.com Subject: Saying Hello Body: This is a message just to say hello."
+
 
     elif scenario == "notion":
         os.environ["NOTION_KEY"] = config["NOTION_KEY"]
