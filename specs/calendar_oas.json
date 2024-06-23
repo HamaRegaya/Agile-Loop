@@ -21,21 +21,333 @@
         "scheme": "bearer"
       },
       "oauth2Auth": {
-        "type": "http",
-        "scheme": "oauth2"
+        "type": "oauth2",
+        "flows": {
+          "clientCredentials": {
+            "tokenUrl": "https://oauth2.googleapis.com/token",
+            "scopes": {}
+          }
+        }
       }
     }
   },
   "tags": [
     {
-      "name": "Calender"
+      "name": "Calendar"
+    },
+    {
+      "name": "OAuth2"
     }
   ],
   "paths": {
+    "https://calendar-pa.clients6.google.com/$rpc/google.internal.calendar.v1.ConferencingService/CreateConferenceData": {
+      "post": {
+        "tags": ["Calendar"],
+        "summary": "Create an event with Google Meet conference data",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "SAPISIDHASH 1719084657_3926c82c714368c914cfd8365a91eed6f4f8fb8d"
+            }
+          },
+          {
+            "name": "X-Goog-Api-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "AIzaSyAJV0pH9dpVwdNZeLajIGsIpjcPu3tVgAE"
+            }
+          },
+          {
+            "name": "X-Goog-Authuser",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "0"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json+protobuf": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "summary": {
+                    "type": "string",
+                    "example": "Team Meeting"
+                  },
+                  "start": {
+                    "type": "object",
+                    "properties": {
+                      "dateTime": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2024-06-21T10:00:00Z"
+                      },
+                      "timeZone": {
+                        "type": "string",
+                        "example": "UTC"
+                      }
+                    },
+                    "required": ["dateTime", "timeZone"]
+                  },
+                  "end": {
+                    "type": "object",
+                    "properties": {
+                      "dateTime": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2024-06-21T11:00:00Z"
+                      },
+                      "timeZone": {
+                        "type": "string",
+                        "example": "UTC"
+                      }
+                    },
+                    "required": ["dateTime", "timeZone"]
+                  },
+                  "conferenceData": {
+                    "type": "object",
+                    "properties": {
+                      "createRequest": {
+                        "type": "object",
+                        "properties": {
+                          "requestId": {
+                            "type": "string",
+                            "example": "sample123",
+                            "description": "Unique ID for the conference request"
+                          },
+                          "conferenceSolutionKey": {
+                            "type": "object",
+                            "properties": {
+                              "type": {
+                                "type": "string",
+                                "example": "hangoutsMeet",
+                                "description": "Type of conference solution. Use 'hangoutsMeet' for Google Meet."
+                              }
+                            },
+                            "required": ["type"]
+                          }
+                        },
+                        "required": ["requestId", "conferenceSolutionKey"]
+                      }
+                    }
+                  }
+                },
+                "required": ["summary", "start", "end", "conferenceData"]
+              },
+              "examples": {
+                "Create Event with Conference": {
+                  "summary": "Team Meeting",
+                  "start": {
+                    "dateTime": "2024-06-21T10:00:00Z",
+                    "timeZone": "UTC"
+                  },
+                  "end": {
+                    "dateTime": "2024-06-21T11:00:00Z",
+                    "timeZone": "UTC"
+                  },
+                  "conferenceData": {
+                    "createRequest": {
+                      "requestId": "sample123",
+                      "conferenceSolutionKey": {
+                        "type": "hangoutsMeet"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Event created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "htmlLink": {
+                      "type": "string",
+                      "description": "Link to view the event in Google Calendar"
+                    },
+                    "conferenceData": {
+                      "type": "object",
+                      "properties": {
+                        "entryPoints": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "uri": {
+                                "type": "string",
+                                "description": "URL to join the conference (Google Meet)"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+      "https://calendar.google.com/calendar/u/0/sync.sync": {
+        "post": {
+          "tags": ["Calendar"],
+          "summary": "Sync Google Calendar data",
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "parameters": [
+            {
+              "name": "Authorization",
+              "in": "header",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "example": "Bearer your_authorization_token"
+              }
+            },
+            {
+              "name": "Content-Type",
+              "in": "header",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "example": "application/x-www-form-urlencoded;charset=UTF-8"
+              }
+            },
+            {
+              "name": "X-Goog-Api-Key",
+              "in": "header",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "example": "AIzaSyAJV0pH9dpVwdNZeLajIGsIpjcPu3tVgAE"
+              }
+            },
+            {
+              "name": "X-Goog-Authuser",
+              "in": "header",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "example": "0"
+              }
+            }
+          ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/x-www-form-urlencoded": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "syncToken": {
+                      "type": "string",
+                      "example": "token_to_sync_calendars",
+                      "description": "Token to sync calendars"
+                    },
+                    "calendarId": {
+                      "type": "string",
+                      "example": "primary",
+                      "description": "Calendar ID to sync"
+                    }
+                  },
+                  "required": ["syncToken", "calendarId"]
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Calendar synced successfully",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "syncToken": {
+                        "type": "string",
+                        "description": "New sync token"
+                      },
+                      "items": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string",
+                              "description": "Event ID"
+                            },
+                            "summary": {
+                              "type": "string",
+                              "description": "Event summary"
+                            },
+                            "start": {
+                              "type": "object",
+                              "properties": {
+                                "dateTime": {
+                                  "type": "string",
+                                  "format": "date-time",
+                                  "description": "Event start time"
+                                },
+                                "timeZone": {
+                                  "type": "string",
+                                  "description": "Event time zone"
+                                }
+                              }
+                            },
+                            "end": {
+                              "type": "object",
+                              "properties": {
+                                "dateTime": {
+                                  "type": "string",
+                                  "format": "date-time",
+                                  "description": "Event end time"
+                                },
+                                "timeZone": {
+                                  "type": "string",
+                                  "description": "Event time zone"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+    },
     "/calendar/v3/users/me/calendarList": {
       "get": {
-        "tags": ["Calender"],
-        "summary": "List all Calenders",
+        "tags": ["Calendar"],
+        "summary": "List all Calendars",
         "security": [
           {
             "bearerAuth": []
@@ -51,44 +363,229 @@
         }
       }
     },
-    "/calendar/v3/calendars/{{calendarId}}/events": {
+    "/calendar/v3/calendars/{calendarId}/events": {
       "post": {
-        "tags": ["Calender"],
+        "tags": ["Calendar"],
         "summary": "Add Event to Specific Calendar",
+        "operationId": "addEvent",
         "requestBody": {
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "type": "object",
-                "example": {
-                  "summary": "{{event_name}}",
-                  "description": "{{event_description}}",
+                "properties": {
+                  "summary": {
+                    "type": "string",
+                    "description": "Title of the event"
+                  },
+                  "description": {
+                    "type": "string",
+                    "description": "Description of the event"
+                  },
                   "start": {
-                    "dateTime": "{{event_start_date}}",
-                    "timeZone": "America/Los_Angeles"
+                    "type": "object",
+                    "properties": {
+                      "dateTime": {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Start date and time of the event in ISO format"
+                      },
+                      "timeZone": {
+                        "type": "string",
+                        "description": "Time zone of the event"
+                      }
+                    },
+                    "required": ["dateTime", "timeZone"]
                   },
                   "end": {
-                    "dateTime": "{{event_end_date}}",
-                    "timeZone": "America/Los_Angeles"
+                    "type": "object",
+                    "properties": {
+                      "dateTime": {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "End date and time of the event in ISO format"
+                      },
+                      "timeZone": {
+                        "type": "string",
+                        "description": "Time zone of the event"
+                      }
+                    },
+                    "required": ["dateTime", "timeZone"]
+                  }
+                },
+                "required": ["summary", "start", "end"]
+              },"requestBody": {
+                "content": {
+                  "application/json+protobuf": {
+                    "schema": {
+                      "type": "object",
+                      "properties": {
+                        "summary": {
+                          "type": "string",
+                          "example": "Team Meeting"
+                        },
+                        "start": {
+                          "type": "object",
+                          "properties": {
+                            "dateTime": {
+                              "type": "string",
+                              "example": "2024-06-21T10:00:00Z"
+                            },
+                            "timeZone": {
+                              "type": "string",
+                              "example": "UTC"
+                            }
+                          }
+                        },
+                        "end": {
+                          "type": "object",
+                          "properties": {
+                            "dateTime": {
+                              "type": "string",
+                              "example": "2024-06-21T11:00:00Z"
+                            },
+                            "timeZone": {
+                              "type": "string",
+                              "example": "UTC"
+                            }
+                          }
+                        },
+                        "conferenceData": {
+                          "type": "object",
+                          "properties": {
+                            "createRequest": {
+                              "type": "object",
+                              "properties": {
+                                "requestId": {
+                                  "type": "string",
+                                  "example": "sample123",
+                                  "description": "Unique ID for the conference request"
+                                },
+                                "conferenceSolutionKey": {
+                                  "type": "object",
+                                  "properties": {
+                                    "type": {
+                                      "type": "string",
+                                      "example": "hangoutsMeet",
+                                      "description": "Type of conference solution. Use 'hangoutsMeet' for Google Meet."
+                                    }
+                                  },
+                                  "required": ["type"]
+                                }
+                              },
+                              "required": ["requestId", "conferenceSolutionKey"]
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "examples": {
+                      "Create Event with Conference": {
+                        "value": {
+                          "summary": "Team Meeting",
+                          "start": {
+                            "dateTime": "2024-06-21T10:00:00Z",
+                            "timeZone": "UTC"
+                          },
+                          "end": {
+                            "dateTime": "2024-06-21T11:00:00Z",
+                            "timeZone": "UTC"
+                          },
+                          "conferenceData": {
+                            "createRequest": {
+                              "requestId": "sample123",
+                              "conferenceSolutionKey": {
+                                "type": "hangoutsMeet"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
                   }
                 }
-              }
+              },
+              "responses": {
+                "200": {
+                  "description": "Event created successfully",
+                  "content": {
+                    "application/json+protobuf": {
+                      "schema": {
+                        "type": "object",
+                        "properties": {
+                          "htmlLink": {
+                            "type": "string",
+                            "description": "Link to view the event in Google Calendar"
+                          },
+                          "conferenceData": {
+                            "type": "object",
+                            "properties": {
+                              "entryPoints": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "uri": {
+                                      "type": "string",
+                                      "description": "URL to join the conference (Google Meet)"
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "parameters": [
+                {
+                  "name": "Authorization",
+                  "in": "header",
+                  "required": true,
+                  "schema": {
+                    "type": "string",
+                    "example": "SAPISIDHASH 1719084657_3926c82c714368c914cfd8365a91eed6f4f8fb8d"
+                  }
+                },
+                {
+                  "name": "X-Goog-Api-Key",
+                  "in": "header",
+                  "required": true,
+                  "schema": {
+                    "type": "string",
+                    "example": "AIzaSyAJV0pH9dpVwdNZeLajIGsIpjcPu3tVgAE"
+                  }
+                },
+                {
+                  "name": "X-Goog-Authuser",
+                  "in": "header",
+                  "required": true,
+                  "schema": {
+                    "type": "string",
+                    "example": "0"
+                  }
+                }
+              ]
             }
           }
         },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
         "parameters": [
           {
             "name": "calendarId",
             "in": "path",
+            "required": true,
             "schema": {
               "type": "string"
-            },
-            "required": true
+            }
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
           }
         ],
         "responses": {
@@ -101,16 +598,25 @@
         }
       },
       "get": {
-        "tags": ["Calender"],
+        "tags": ["Calendar"],
         "summary": "Get Events of a Calendar",
         "parameters": [
           {
-            "name": "Authorization",
-            "in": "header",
+            "name": "calendarId",
+            "in": "path",
+            "required": true,
             "schema": {
               "type": "string"
-            },
-            "example": "Bearer {{ACCESS_TOKEN}}"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "Bearer {{ACCESS_TOKEN}}"
+            }
           }
         ],
         "responses": {
@@ -123,26 +629,169 @@
         }
       }
     },
-    "/calendar/v3/users/me/calendarList/{{calendarId}}": {
+    "/calendar/v3/calendars/primary/events": {
+      "post": {
+        "summary": "Create a Google Calendar Event",
+        "operationId": "createEvent",
+        "parameters": [
+          {
+            "name": "calendarId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Calendar ID to create the event in. Use 'primary' for the user's primary calendar."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "summary": {
+                    "type": "string",
+                    "description": "Title of the event"
+                  },
+                  "start": {
+                    "type": "object",
+                    "properties": {
+                      "dateTime": {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Start date and time of the event in UTC ISO format"
+                      },
+                      "timeZone": {
+                        "type": "string",
+                        "description": "Time zone of the event"
+                      }
+                    },
+                    "required": ["dateTime", "timeZone"]
+                  },
+                  "end": {
+                    "type": "object",
+                    "properties": {
+                      "dateTime": {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "End date and time of the event in UTC ISO format"
+                      },
+                      "timeZone": {
+                        "type": "string",
+                        "description": "Time zone of the event"
+                      }
+                    },
+                    "required": ["dateTime", "timeZone"]
+                  },
+                  "conferenceData": {
+                    "type": "object",
+                    "properties": {
+                      "createRequest": {
+                        "type": "object",
+                        "properties": {
+                          "requestId": {
+                            "type": "string",
+                            "description": "Unique ID for the conference request"
+                          },
+                          "conferenceSolutionKey": {
+                            "type": "object",
+                            "properties": {
+                              "type": {
+                                "type": "string",
+                                "description": "Type of conference solution. Use 'hangoutsMeet' for Google Meet."
+                              }
+                            },
+                            "required": ["type"]
+                          }
+                        },
+                        "required": ["requestId", "conferenceSolutionKey"]
+                      }
+                    }
+                  }
+                },
+                "required": ["summary", "start", "end", "conferenceData"]
+              },
+              "example": {
+                "summary": "Team Meeting",
+                "start": {
+                  "dateTime": "2024-06-21T10:00:00Z",
+                  "timeZone": "UTC"
+                },
+                "end": {
+                  "dateTime": "2024-06-21T11:00:00Z",
+                  "timeZone": "UTC"
+                },
+                "conferenceData": {
+                  "createRequest": {
+                    "requestId": "sample123",
+                    "conferenceSolutionKey": {
+                      "type": "hangoutsMeet"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Event created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "htmlLink": {
+                      "type": "string",
+                      "description": "Link to view the event in Google Calendar"
+                    },
+                    "conferenceData": {
+                      "type": "object",
+                      "properties": {
+                        "entryPoints": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "uri": {
+                                "type": "string",
+                                "description": "URL to join the conference (Google Meet)"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/calendar/v3/users/me/calendarList/{calendarId}": {
       "delete": {
-        "tags": ["Calender"],
+        "tags": ["Calendar"],
         "summary": "Delete Calendar from Calendars",
         "parameters": [
           {
-            "name": "Authorization",
-            "in": "header",
-            "schema": {
-              "type": "string"
-            },
-            "example": "Bearer {{ACCESS_TOKEN}}"
-          },
-          {
             "name": "calendarId",
             "in": "path",
+            "required": true,
             "schema": {
               "type": "string"
-            },
-            "required": true
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "Bearer {{ACCESS_TOKEN}}"
+            }
           }
         ],
         "responses": {
@@ -157,9 +806,10 @@
     },
     "/o/oauth2/token": {
       "post": {
-        "tags": ["default"],
-        "summary": "Refresh Token",
+        "tags": ["OAuth2"],
+        "summary": "Refresh OAuth2 Token",
         "requestBody": {
+          "required": true,
           "content": {
             "application/x-www-form-urlencoded": {
               "schema": {
@@ -167,7 +817,7 @@
                 "properties": {
                   "grant_type": {
                     "type": "string",
-                    "example": "{{refresh_token}}"
+                    "example": "refresh_token"
                   },
                   "refresh_token": {
                     "type": "string",
@@ -175,13 +825,14 @@
                   },
                   "client_id": {
                     "type": "string",
-                    "example": "{{clientId}}"
+                    "example": "{{client_id}}"
                   },
                   "client_secret": {
                     "type": "string",
-                    "example": "{{clientSecret}}"
+                    "example": "{{client_secret}}"
                   }
-                }
+                },
+                "required": ["grant_type", "refresh_token", "client_id", "client_secret"]
               }
             }
           }
@@ -189,16 +840,6 @@
         "security": [
           {
             "oauth2Auth": []
-          }
-        ],
-        "parameters": [
-          {
-            "name": "Content-Type",
-            "in": "header",
-            "schema": {
-              "type": "string"
-            },
-            "example": "application/x-www-form-urlencoded"
           }
         ],
         "responses": {
@@ -213,3 +854,4 @@
     }
   }
 }
+

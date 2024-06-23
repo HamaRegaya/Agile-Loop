@@ -1,0 +1,5 @@
+Example 1:
+User query: "Send an email "
+Plan Step 1: Call the API endpoint POST /gmail/v1/users/me/messages/send with the "raw" : "base64url content provided".
+Thought: I have successfully executed the plan and sent the email as requested.
+Final Answer: I have sent an email .

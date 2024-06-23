@@ -1,0 +1,18 @@
+Example 1:
+Background: No background
+User query: "List all of my Gmail labels with their ids"
+API calling 1: GET /gmail/v1/users/{userId}/labels to get the ids of all labels in the user's Gmail account.
+API response: Your Gmail labels are following:
+[list of all labels with their ids]
+
+Example 2:
+Background: No background
+User query: "Send an email to example@example.com"
+API calling 1: POST /gmail/v1/users/me/messages/send to send an email.
+API response: Email sent successfully with id "abcdef123456".
+
+Example 3:
+Background: No background
+User query: "Delete an email with id abcdef123456"
+API calling 1: DELETE /gmail/v1/users/{userId}/messages/{id} to delete an email with the specified id.
+API response: Email with the id "abcdef123456" deleted successfully.

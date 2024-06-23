@@ -5,9 +5,11 @@ import os
 import tkinter as tk
 from tkinter import simpledialog, messagebox
 from langchain_core.prompts import ChatPromptTemplate
-from langchain_groq import ChatGroq
+# from langchain_groq import ChatGroq
 from langchain_openai import AzureChatOpenAI
-
+from langchain_core.messages import HumanMessage
+# from langchain.chat_models import AzureChatOpenAI
+import base64
 
 logger = logging.getLogger()
 
@@ -106,8 +108,42 @@ def main():
         api_spec, headers = process_spec_file(
             file_path="specs/sheets_oas.json", token=os.environ["GOOGLE_TOKEN"]
         )
-        query_example = 'Create a new Spreadsheet with title: "Exercise Logs". Print the complete api response result as it is.'
+        query_example = 'Create a new Spreadsheet with the name: "Exercise Logs". Print the complete api response result as it is.'
 
+    elif scenario == "gmail":
+        os.environ["GOOGLE_TOKEN"] = config["google_token"]
+
+        api_spec, headers = process_spec_file(
+            file_path="specs/gmail_oas.json", token=os.environ["GOOGLE_TOKEN"]
+        )
+        query_example = 'Send an email From: mohamedhachicha2001@gmail.com To: hachicha.mohamed@esprit.com Subject: Saying Hello This is a message just to say hello.'
+
+    elif scenario == "google-meet":
+        if user_id is not None:
+            try:
+                ser_qu = f"SELECT * FROM credentials WHERE user_id = {user_id};"
+                cursor.execute(ser_qu)
+                res = cursor.fetchone()
+                res_t = res[2]
+                messagebox.showinfo("Information", f"your token {res_t}")
+                os.environ["GOOGLE_TOKEN"] = res_t
+                dic = {
+                    "user_id": user_id,
+                    "your_token": res_t
+                }
+                messagebox.showinfo("Information", dic)
+            except:
+                messagebox.showinfo("Information", "Key is not present in the database")
+                return ""
+
+        else:
+            messagebox.showinfo("Information", "Your id is incorrect.")
+
+        api_spec, headers = process_spec_file(
+            file_path="specs/calendar_oas.json", token=os.environ["GOOGLE_TOKEN"]
+        )
+        query_example = "Create a Google Meet the date is 25-06-2024 at 8:00 a.m with the name 'Bo7' that lasts 3 hours the event name is 'bo7' and print the complete API response result as it is."
+    
     elif scenario == "notion":
         os.environ["NOTION_KEY"] = config["NOTION_KEY"]
         query_example = "Get me my page on notion"
@@ -280,7 +316,8 @@ def main():
         azure_endpoint=config['azure_endpoint'],
         api_key=config['api_key'],
         api_version=config['api_version'],
-        temperature=0)
+        temperature=0
+    )
     
 
     #llm = OpenAI(model_name="gpt-3.5-turbo", temperature=0.0, max_tokens=1024)
@@ -300,6 +337,44 @@ def main():
     logger.info(f"Query: {query}")
 
     start_time = time.time()
+    
+    query_enhancer = AzureChatOpenAI(
+        azure_deployment=config['azure_deployment'],
+        azure_endpoint=config['azure_endpoint'],
+        api_key=config['api_key'],
+        api_version=config['api_version'],
+        temperature=0
+    )
+
+    # query_to_enhance = f"you are an OPENAPI expert and you will enhance the original_query ,Keep every detail in the original_query and include the API s to use also make it suitable for an LLM to understand the tasks clearly. This is the original_query: {query}"
+
+
+    # message = HumanMessage(
+    #     content=query_to_enhance
+    # )
+    # enhanced_query = query_enhancer.invoke([message])
+    # print(enhanced_query.content)
+
+    if scenario == "gmail":
+        how_to_encode = f"""extract from this query the content of the gmail message in this format : 
+        
+        From: example@example.com 
+        To: example@example.com 
+        Subject: the subject 
+
+        the message
+        
+        
+        this is the query : {query}
+        """
+        human_email_content = HumanMessage(
+            content=how_to_encode
+        )
+        email_content = query_enhancer.invoke([human_email_content])
+        print(email_content.content)
+        base64content = base64.b64encode(email_content.content.encode('utf-8')).decode('utf-8')
+        query = "this is the base64 content of the email : " + base64content  
+    
     api_llm.run(query)
     logger.info(f"Execution Time: {time.time() - start_time}")
 
