@@ -230,7 +230,8 @@ class AgileLoopApp(tk.Tk):
         - scenario: the application or platform mentioned in the input (e.g., Trello, Slack, etc.)
         - id: if the ID is not mentioned, default to 2
         - query: the action or command described by the user
-
+        this is the list of the possible scenarios : ["tmdb", "spotify", "stable", "calendar", "notion", "upclick",
+            "discord", "sheets", "trello", "jira", "salesforce", "google-meet" , "gmail"]
         Return only the extracted details in the following JSON format:
         {
         "listeScenario": [
@@ -642,8 +643,6 @@ class AgileLoopApp(tk.Tk):
             self.update_label("Done !")
         except json.JSONDecodeError as e:
             self.update_label(output)
-            
-
 
 if __name__ == "__main__":
     app = AgileLoopApp()
