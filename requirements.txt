@@ -13,4 +13,10 @@ langchain-openai==0.1.8
 # google-auth-oauthlib
 pillow == 10.3.0
 PyAudio == 0.2.14
+elevenlabs
 groq
+PyQt5
+PyQtWebEngine
+flask-cors
+flask
+azure-cognitiveservices-speech

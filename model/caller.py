@@ -77,6 +77,18 @@ Input: {{
     "description": "Set the volume for the current playback device."
 }}
 
+
+Example 4:
+Operation: POST
+Input: {{
+    "url": "https://www.googleapis.com/gmail/v1/users/me/messages/send",
+    "data": {{
+        "raw": "RnJvbTogbW9oYW1lZGhhY2hpY2hhMjAwMUBnbWFpbC5jb20gClRvOiBoYWNoaWNoYS5tb2hhbWVkQGVzcHJpdC50biAKU3ViamVjdDogU2F5aW5nIEhlbGxvIAoKVGhpcyBpcyBhIG1lc3NhZ2UganVzdCB0byBzYXkgaGVsbG8u"
+    }}
+}}
+
+
+
 If the "params" or "data" key in path contains "{{}}", it means that it is a variable and you should replace it with the appropriate value.
 
 I will give you the background information and the plan you should execute.

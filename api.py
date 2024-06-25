@@ -6,6 +6,8 @@ logger = logging.getLogger()
 from fastapi import FastAPI, status, Query, Depends
 from langchain_groq import ChatGroq
 from langchain_openai import AzureChatOpenAI
+from langchain_community.llms import Ollama
+
 
 app = FastAPI()
 
