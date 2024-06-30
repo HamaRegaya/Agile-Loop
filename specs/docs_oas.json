@@ -60,106 +60,84 @@
           "200": {
             "description": "Document created successfully",
             "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "documentId": {
-                      "type": "string"
-                    },
-                    "title": {
-                      "type": "string"
-                    }
-                  }
-                }
-              }
-            }
+              "application/json": {}
+            }            
           }
         }
       }
-    },
-    "/users/me/messages/send": {
+    },"/v1/documents/{documentId}:batchUpdate": {
       "post": {
-        "tags": ["Gmail"],
-        "summary": "Send email",
-        "description": "Sends an email on behalf of the user",
+        "tags": ["Documents"],
+        "summary": "Batch update document",
+        "parameters": [
+          {
+            "name": "documentId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
                 "type": "object",
                 "properties": {
-                  "raw": {
-                    "type": "string",
-                    "description": "Base64-encoded email string"
-                  },
-                  "subject": {
-                    "type": "string",
-                    "description": "Email subject"
-                  },
-                  "body": {
-                    "type": "string",
-                    "description": "Email body"
+                  "requests": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "insertText": {
+                          "type": "object",
+                          "properties": {
+                            "location": {
+                              "type": "object",
+                              "properties": {
+                                "index": "1"
+                              },
+                              "required": ["index"]
+                            },
+                            "text": {
+                              "type": "string"
+                            }
+                          },
+                          "required": ["text"]
+                        }
+                      }
+                    }
                   }
                 },
-                "required": ["raw", "subject", "body"]
+                "required": ["requests"]
               }
             }
           }
         },
         "security": [
           {
-            "bearerAuth": []
+            "oauth2Auth": []
           }
         ],
-        "parameters": [],
+
         "responses": {
           "200": {
-            "description": "Successful response",
+            "description": "Batch update successful",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "messageId": {
-                      "type": "string",
-                      "description": "Message ID"
-                    }
-                  }
+                  "type": "object"
                 }
               }
             }
-          },
-          "400": {
-            "description": "Bad request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "error": {
-                      "type": "string",
-                      "description": "Error message"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "error": {
-                      "type": "string",
-                      "description": "Error message"
-                    }
-                  }
-                }
-              }
+          }
+        },
+        "headers": {
+          "Content-Type": {
+            "schema": {
+              "type": "string",
+              "example": "application/json"
             }
           }
         }

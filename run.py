@@ -101,7 +101,9 @@ def get_access_token():
 app = Flask(__name__)
 CORS(app)
 
-client_voice = ElevenLabs(api_key="89b2645aa181a53247c15bbe7918d16e")
+config = yaml.load(open("yaml/config.yaml", "r"), Loader=yaml.FullLoader)
+
+client_voice = ElevenLabs(api_key=config['elevenlabs_api_key'])
 
 def text_to_speech_file(text: str) -> str:
     response = client_voice.text_to_speech.convert(

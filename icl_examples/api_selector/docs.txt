@@ -1,0 +1,8 @@
+Example 1 : Create a new docs file with the title: "Hachicha"
+STEP 1 : POST /v1/documents with body {"title": "Hachicha"} 
+API response: Document Created successfully.
+
+Example 2 : Create a new docs file with the title: "Hachicha". Print the complete api response result as it is and write in this docs hello world.
+STEP 1 : POST /v1/documents with body {"title": "Hachicha"} 
+STEP 2 : POST /v1/documents/{documentId}:batchUpdate (the documentId is extracted from the response of the STEP 1)
+API response: Document Created successfully.
