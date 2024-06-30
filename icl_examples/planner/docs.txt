@@ -1,0 +1,5 @@
+Example 1:
+User query: "Create a new docs file  with the title: "Hachicha". Print the complete api response result as it is."
+Plan Step 1: Call the API endpoint POST https://docs.googleapis.com/v1/documents with the body {"title" : "Hachicha"}.
+Thought: I have successfully executed the plan and created the docs file as requested.
+Final Answer: I have create an docs file .

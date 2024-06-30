@@ -1,0 +1,169 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Google Docs API",
+    "description": "API for managing Google Docs documents",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://docs.googleapis.com"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "oauth2Auth": {
+        "type": "oauth2",
+        "flows": {
+          "authorizationCode": {
+            "authorizationUrl": "https://accounts.google.com/o/oauth2/auth",
+            "tokenUrl": "https://oauth2.googleapis.com/token",
+            "scopes": {
+              "https://www.googleapis.com/auth/documents": "Manage your Google Docs documents"
+            }
+          }
+        }
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "Documents"
+    }
+  ],
+  "paths": {
+    "/v1/documents": {
+      "post": {
+        "tags": ["Documents"],
+        "summary": "Create a new document",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string"
+                  }
+                },
+                "required": ["title"]
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "oauth2Auth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Document created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "documentId": {
+                      "type": "string"
+                    },
+                    "title": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/me/messages/send": {
+      "post": {
+        "tags": ["Gmail"],
+        "summary": "Send email",
+        "description": "Sends an email on behalf of the user",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "raw": {
+                    "type": "string",
+                    "description": "Base64-encoded email string"
+                  },
+                  "subject": {
+                    "type": "string",
+                    "description": "Email subject"
+                  },
+                  "body": {
+                    "type": "string",
+                    "description": "Email body"
+                  }
+                },
+                "required": ["raw", "subject", "body"]
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "messageId": {
+                      "type": "string",
+                      "description": "Message ID"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "description": "Error message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "description": "Error message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
