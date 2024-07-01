@@ -159,7 +159,7 @@ def chat():
     - id: if the ID is not mentioned, default to 2
     - query: the action or command described by the user
     this is the list of the possible scenarios : ["tmdb", "spotify", "stable", "calendar", "notion", "upclick",
-        "discord", "sheets", "trello", "jira", "salesforce", "google-meet" , "gmail", "docs"]
+        "discord", "sheets", "trello", "jira", "salesforce", "google-meet" , "gmail", "docs" , "slides"]
     Return only the extracted details in the following JSON format take note that the listeScenario can contain only 1 or multiple Scenarios and cannot be empty:
     {
     "listeScenario": [
@@ -306,6 +306,15 @@ def chat():
                     file_path="specs/docs_oas.json", token=os.environ["GOOGLE_TOKEN"]
                 )
                 query_example = 'Create a new docs file with the title: "Hachicha". Print the complete api response result as it is.'
+            
+            elif scenario == "slides":
+                access_token = get_access_token()
+                os.environ["GOOGLE_TOKEN"] = access_token
+
+                api_spec, headers = process_spec_file(
+                    file_path="specs/slides_oas.json", token=os.environ["GOOGLE_TOKEN"]
+                )
+                query_example = 'Create a new slide with the title: "Hachicha". Print the complete api response result as it is.'
             
             elif scenario == "gmail":
                 access_token = get_access_token()

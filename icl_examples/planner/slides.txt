@@ -1,0 +1,42 @@
+Example 1:
+User query: "Create a new slide with the title: "Hachicha". Print the complete api response result as it is."
+Plan Step 1: Call the API endpoint POST https://slides.googleapis.com/v1/presentations with the body {"title" : "Hachicha"}.
+Thought: I have successfully executed the plan and created the docs file as requested.
+Final Answer: I have create an docs file .
+
+Example 2: Create a new slide with the title: "Hachicha". Print the complete api response result as it is and add a new slide.
+STEP 1 : POST /v1/presentations with body {"title": "Hachicha"} 
+API RESPONSE of  the first Step:
+{
+    "presentationId": "1Yd_oWrFCDXMdHJvjk6LndZeXcd_s44yIVp9e7unWMDU",
+    "title": "hachicha",
+    "pageSize": {
+        "width": {
+            "magnitude": 9144000,
+            "unit": "EMU"
+        },
+        "height": {
+            "magnitude": 5143500,
+            "unit": "EMU"
+        }
+    }
+}
+
+STEP 2 : extracte the presentationId from the response  of the first step and use it in the third step.
+Response : presentationId : 1lbIE0n-qL0U6WpC0eqA5_ZN81tpe_mjjKmSvaU3qE8M
+STEP 3 : inset in the document the text provided int he query
+API Pyload : {
+  "requests": [
+    {
+      "createSlide": {
+        "objectId": "new_slide_id",
+        "insertionIndex": 1,
+        "slideLayoutReference": {
+          "predefinedLayout": "TITLE_AND_TWO_COLUMNS"
+        }
+      }
+    }
+  ]
+}
+API calling : Successfully called POST  /v1/presentations/1lbIE0n-qL0U6WpC0eqA5_ZN81tpe_mjjKmSvaU3qE8M:batchUpdate  endpoint with the payload.
+API response: Presentation Created successfully .

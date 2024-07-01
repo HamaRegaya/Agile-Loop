@@ -49,7 +49,7 @@ class ApiLLM(Chain):
         if scenario not in [
             "tmdb", "spotify", "stable", "calendar", "notion", "upclick",
             "discord", "sheets", "trello", "jira", "salesforce", "google-meet" ,"your_scenario_name" , "gmail"
-            ,"docs"
+            ,"docs" , "slides"
         ]:
             raise ValueError(f"Invalid scenario {scenario}")
 
