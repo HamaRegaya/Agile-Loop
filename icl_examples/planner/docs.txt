@@ -1,0 +1,66 @@
+Example 1:
+User query: "Create a new docs file  with the title: "Hachicha". Print the complete api response result as it is."
+Plan Step 1: Call the API endpoint POST https://docs.googleapis.com/v1/documents with the body {"title" : "Hachicha"}.
+Thought: I have successfully executed the plan and created the docs file as requested.
+Final Answer: I have create an docs file .
+
+Example 2: Create a new docs file with the title: "Hachicha". Print the complete api response result as it is and write in the document "hello world".
+STEP 1 : POST /v1/documents with body {"title": "Hachicha"} 
+API RESPONSE of  the first Step:
+{
+    "title": "hachicha",
+    "body": {
+        "content": [
+            {
+                "endIndex": 1,
+                "sectionBreak": {
+                    "sectionStyle": {
+                        "columnSeparatorStyle": "NONE",
+                        "contentDirection": "LEFT_TO_RIGHT",
+                        "sectionType": "CONTINUOUS"
+                    }
+                }
+            },
+            {
+                "startIndex": 1,
+                "endIndex": 2,
+                "paragraph": {
+                    "elements": [
+                        {
+                            "startIndex": 1,
+                            "endIndex": 2,
+                            "textRun": {
+                                "content": "\n",
+                                "textStyle": {}
+                            }
+                        }
+                    ],
+                    "paragraphStyle": {
+                        "namedStyleType": "NORMAL_TEXT",
+                        "direction": "LEFT_TO_RIGHT"
+                    }
+                }
+            }
+        ]
+    },
+    "revisionId": "ALBJ4LsxHAXerPBJ9zR97Nn4VSS22j8E3gVHPCdUcyDygc63XNpLNNapNt30E8zXObh3foBIvfurHm986i_EGA",
+    "suggestionsViewMode": "SUGGESTIONS_INLINE",
+    "documentId": "1lbIE0n-qL0U6WpC0eqA5_ZN81tpe_mjjKmSvaU3qE8M"
+}
+STEP 2 : extracte the documentId from the response of the first step and use it in the third step.
+Response : documentId : 1lbIE0n-qL0U6WpC0eqA5_ZN81tpe_mjjKmSvaU3qE8M
+STEP 3 : inset in the document the text provided int he query
+API Pyload : {
+  "requests": [
+    {
+      "insertText": {
+        "location": {
+          "index": 1
+        },
+        "text": "{text provided int he query}"
+      }
+    }
+  ]
+}
+API calling : Successfully called POST  /v1/documents/1lbIE0n-qL0U6WpC0eqA5_ZN81tpe_mjjKmSvaU3qE8M:batchUpdate  endpoint with the payload.
+API response: Document Created successfully .

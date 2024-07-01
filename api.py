@@ -6,6 +6,8 @@ logger = logging.getLogger()
 from fastapi import FastAPI, status, Query, Depends
 from langchain_groq import ChatGroq
 from langchain_openai import AzureChatOpenAI
+from langchain_community.llms import Ollama
+
 
 app = FastAPI()
 
@@ -85,7 +87,7 @@ async def handle_interaction(
         azure_endpoint=config['azure_endpoint'],
         api_key=config['api_key'],
         api_version=config['api_version'],
-        temperature=0)
+        temperature=0.1)
     api_llm = ApiLLM(
         llm,
         api_spec=api_spec,

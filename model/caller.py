@@ -30,7 +30,7 @@ If you cannot complete them and run into issues, you should explain the issue. I
 Your task is to complete the corresponding api calls according to the plan.
 
 
-Here is documentation on the API:
+Here is documentation on the API and make sure to take only 1 Endpoint:
 Base url: {api_url}
 Endpoints:
 {api_docs}
@@ -76,6 +76,18 @@ Input: {{
     }},
     "description": "Set the volume for the current playback device."
 }}
+
+
+Example 4:
+Operation: POST
+Input: {{
+    "url": "https://www.googleapis.com/gmail/v1/users/me/messages/send",
+    "data": {{
+        "raw": "RnJvbTogbW9oYW1lZGhhY2hpY2hhMjAwMUBnbWFpbC5jb20gClRvOiBoYWNoaWNoYS5tb2hhbWVkQGVzcHJpdC50biAKU3ViamVjdDogU2F5aW5nIEhlbGxvIAoKVGhpcyBpcyBhIG1lc3NhZ2UganVzdCB0byBzYXkgaGVsbG8u"
+    }}
+}}
+
+
 
 If the "params" or "data" key in path contains "{{}}", it means that it is a variable and you should replace it with the appropriate value.
 
@@ -334,7 +346,7 @@ class Caller(Chain):
                             search_type = param.split('=')[-1] + 's'
                             break
                 api_doc_for_parser['responses']['content']['application/json']["schema"]['properties'] = {search_type: api_doc_for_parser['responses']['content']['application/json']["schema"]['properties'][search_type]}
-                #api_doc_for_parser['responses']['content']['application/json'] = {search_type: api_doc_for_parser['responses']['content']['application/json'][search_type]}
+                # api_doc_for_parser['responses']['content']['application/json'] = {search_type: api_doc_for_parser['responses']['content']['application/json'][search_type]}
 
             if not self.simple_parser:
                 response_parser = ResponseParser(

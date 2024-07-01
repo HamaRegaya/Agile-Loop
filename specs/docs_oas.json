@@ -1,0 +1,147 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Google Docs API",
+    "description": "API for managing Google Docs documents",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://docs.googleapis.com"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "oauth2Auth": {
+        "type": "oauth2",
+        "flows": {
+          "authorizationCode": {
+            "authorizationUrl": "https://accounts.google.com/o/oauth2/auth",
+            "tokenUrl": "https://oauth2.googleapis.com/token",
+            "scopes": {
+              "https://www.googleapis.com/auth/documents": "Manage your Google Docs documents"
+            }
+          }
+        }
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "Documents"
+    }
+  ],
+  "paths": {
+    "/v1/documents": {
+      "post": {
+        "tags": ["Documents"],
+        "summary": "Create a new document",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string"
+                  }
+                },
+                "required": ["title"]
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "oauth2Auth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Document created successfully",
+            "content": {
+              "application/json": {}
+            }            
+          }
+        }
+      }
+    },"/v1/documents/{documentId}:batchUpdate": {
+      "post": {
+        "tags": ["Documents"],
+        "summary": "Batch update document",
+        "parameters": [
+          {
+            "name": "documentId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "requests": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "insertText": {
+                          "type": "object",
+                          "properties": {
+                            "location": {
+                              "type": "object",
+                              "properties": {
+                                "index": "1"
+                              },
+                              "required": ["index"]
+                            },
+                            "text": {
+                              "type": "string"
+                            }
+                          },
+                          "required": ["text"]
+                        }
+                      }
+                    }
+                  }
+                },
+                "required": ["requests"]
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "oauth2Auth": []
+          }
+        ],
+
+        "responses": {
+          "200": {
+            "description": "Batch update successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "headers": {
+          "Content-Type": {
+            "schema": {
+              "type": "string",
+              "example": "application/json"
+            }
+          }
+        }
+      }
+    }
+  }
+}

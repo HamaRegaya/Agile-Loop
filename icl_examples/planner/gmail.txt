@@ -1,0 +1,5 @@
+Example 1:
+User query: "Send an email From: mohamedhachicha2001@gmail.com To: hachicha.mohamed@esprit.tn Subject: Saying Hello This is a message just to say hello."
+Plan Step 1: Call the API endpoint POST /gmail/v1/users/me/messages/send with the body {"raw" : "base64url of the whole body"}.
+Thought: I have successfully executed the plan and sent the email as requested.
+Final Answer: I have sent an email .

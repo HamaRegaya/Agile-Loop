@@ -1,0 +1,183 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Gmail API",
+    "description": "Gmail API for sending emails and retrieving user profiles",
+    "version": "6.0.7-beta",
+    "termsOfService": "http://tos.myweb.com",
+    "contact": {
+      "name": "Gmail API Team",
+      "email": "gmail-api-support@example.com",
+      "url": "https://example.com/gmail-api"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://www.googleapis.com/gmail/v1",
+      "description": "Gmail API server"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "description": "Bearer authentication using an access token"
+      },
+      "oauth2Auth": {
+        "type": "oauth2",
+        "flows": {
+          "authorizationCode": {
+            "authorizationUrl": "https://accounts.google.com/o/oauth2/auth",
+            "tokenUrl": "https://oauth2.googleapis.com/token"
+          }
+        }
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "Gmail",
+      "description": "Gmail API endpoints"
+    }
+  ],
+  "paths": {
+    "/users/me/profile": {
+      "get": {
+        "tags": ["Gmail"],
+        "summary": "Get current user's Gmail profile",
+        "description": "Retrieves the current user's Gmail profile information",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "emailAddress": {
+                      "type": "string",
+                      "description": "User's email address"
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "User's full name"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "description": "Error message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/me/messages/send": {
+      "post": {
+        "tags": ["Gmail"],
+        "summary": "Send email",
+        "description": "Sends an email on behalf of the user",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "raw": {
+                    "type": "string",
+                    "description": "Base64-encoded email string"
+                  },
+                  "subject": {
+                    "type": "string",
+                    "description": "Email subject"
+                  },
+                  "body": {
+                    "type": "string",
+                    "description": "Email body"
+                  }
+                },
+                "required": ["raw", "subject", "body"]
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "messageId": {
+                      "type": "string",
+                      "description": "Message ID"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "description": "Error message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "description": "Error message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

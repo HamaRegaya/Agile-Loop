@@ -218,6 +218,7 @@ class ResponseParser(Chain):
         elif 'application/json; charset=utf-8' in api_doc['responses']['content']:
             response_schema = json.dumps(
                 api_doc['responses']['content']['application/json; charset=utf-8']["schema"]['properties'], indent=4)
+                #  api_doc['responses']['content']['application/json'], indent=4)
                 # text-davinci-003
         encoder = tiktoken.encoding_for_model('gpt-4')
         encoded_schema = encoder.encode(response_schema)

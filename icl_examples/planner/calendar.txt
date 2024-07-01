@@ -23,3 +23,22 @@ Plan step 2: Delete the calendar with id "addressbook#contacts@group.v.calendar.
 API response: Successfully called DELETE /calendar/v3/users/me/calendarList/{{calendarId}} to delete the calendar with id "addressbook#contacts@group.v.calendar.google.com"
 Thought: I have successfully executed the plan and deleted the calendar from the calendar list.
 Final Answer: I have deleted the calendar from the list. The id of deleted calendar is "addressbook#contacts@group.v.calendar.google.com"
+
+
+Example 4:
+User query: "Create a Google Meet the date is 22-06-2024 with the name 'hello' that lasts 2 hours the event name is 'meetforfriends' and print the complete API response result as it is."
+Plan:
+step 1 : create a calander event 
+Parse the user's query to extract meeting details:
+Date: 02-07-2024
+Start time: Assume 10:00 AM UTC
+End time: 12:00 PM UTC (2 hours duration)
+Event title: "meetforfriends"
+Description: "hello"
+step 1 : Create Event Using Google Calendar API:
+Make a POST request to https://www.googleapis.com/calendar/v3/calendars/primary/events with the constructed event details.
+step 2 : include conferenceDataVersion=1 and alt=json as query parameters to enable Google Meet creation.
+step 3 : Handle authorization via OAuth or API key as per Google's authentication requirements.
+step 4 : Handle API Response:
+Upon successful creation, the API response will include details of the created event.
+Extract and print the complete API response,finally sync the meet with the calendar even ensuring it includes the Google Meet link and other relevant event details.

@@ -1,0 +1,32 @@
+Example 1:
+Background: No background
+User query: Create a new meeting with the title 'Team Sync'.
+API calling 1: POST /v1/meetings to create the meeting
+API response: Successfully called POST /v1/meetings to create the meeting 'Team Sync'. It has been successfully created with id 'abc-mnop-xyz'
+
+Example 2:
+Background: No background
+User query: Add attendees 'user1@example.com' and 'user2@example.com' to the meeting with id 'abc-mnop-xyz'.
+API calling 1: PATCH /v1/meetings/{meetingId}/attendees to add attendees to the meeting with id 'abc-mnop-xyz'
+Instruction: Replace {meetingId} with 'abc-mnop-xyz'
+API response: Successfully called PATCH /v1/meetings/abc-mnop-xyz/attendees to add attendees 'user1@example.com' and 'user2@example.com'. The meeting has been updated.
+
+Example 3:
+Background: The meeting with id 'abc-mnop-xyz' exists.
+User query: Update the title of the meeting to 'Project Kickoff'.
+API calling 1: PATCH /v1/meetings/{meetingId} to update the meeting with id 'abc-mnop-xyz'
+Instruction: Replace {meetingId} with 'abc-mnop-xyz'
+API response: Successfully called PATCH /v1/meetings/abc-mnop-xyz to update the title to 'Project Kickoff'. The meeting has been updated.
+
+Example 4:
+Background: The meeting with id 'abc-mnop-xyz' exists.
+User query: Cancel the meeting with id 'abc-mnop-xyz'.
+API calling 1: DELETE /v1/meetings/{meetingId} to delete the meeting with id 'abc-mnop-xyz'
+Instruction: Replace {meetingId} with 'abc-mnop-xyz'
+API response: Successfully called DELETE /v1/meetings/abc-mnop-xyz to cancel the meeting. The meeting has been deleted.
+
+Example 5:
+Background: No background
+User query: List all meetings.
+API calling 1: GET /v1/meetings to list all meetings
+API response: Successfully called GET /v1/meetings. The list of meetings is returned.

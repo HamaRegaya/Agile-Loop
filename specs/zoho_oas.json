@@ -1,0 +1,123 @@
+﻿{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Zoho CRM API",
+    "description": "API for accessing Leads in Zoho CRM",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://www.zohoapis.com"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    }
+  },
+  "paths": {
+    "/crm/v6/Leads": {
+      "get": {
+        "summary": "Retrieve Leads",
+        "description": "Fetches a list of leads from Zoho CRM with specific fields and filters.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "fields",
+            "in": "query",
+            "required": true,
+            "description": "Fields to be included in the response.",
+            "schema": {
+              "type": "string",
+              "example": "Last_Name,Email,Record_Status__s,Converted__s,Converted_Date_Time"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of leads",
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a Lead",
+        "description": "Creates a new lead in Zoho CRM with the provided details.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "data": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "First_Name": {
+                          "type": "string",
+                          "description": "The first name of the lead"
+                        },
+                        "Last_Name": {
+                          "type": "string",
+                          "description": "The last name of the lead"
+                        },
+                        "Company": {
+                          "type": "string",
+                          "description": "The company name of the lead"
+                        }
+                      },
+                      "required": [
+                        "First_Name",
+                        "Last_Name",
+                        "Company"
+                      ]
+                    }
+                  }
+                }
+              },
+              "example": {
+                "data": [
+                  {
+                    "First_Name": "John",
+                    "Last_Name": "Doe",
+                    "Company": "Acme Inc."
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Lead created successfully",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "400": {
+            "description": "Invalid input",
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      }
+    }
+  }
+}

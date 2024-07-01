@@ -1,0 +1,8 @@
+Example 1 : Create a new slides file with the title: "Hachicha"
+STEP 1 : POST /v1/presentations with body {"title": "Hachicha"} 
+API response: Presentation Created successfully.
+
+Example 2 : Create a new slide with the title: "Hachicha". Print the complete api response result as it is and add a new slide.
+STEP 1 : POST /v1/presentations with body {"title": "Hachicha"} 
+STEP 2 : POST /v1/presentations/{presentationId}:batchUpdate (the presentationId is extracted from the response of the STEP 1)
+API response: Presentation Created successfully.
