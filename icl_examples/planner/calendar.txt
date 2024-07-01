@@ -30,7 +30,7 @@ User query: "Create a Google Meet the date is 22-06-2024 with the name 'hello' t
 Plan:
 step 1 : create a calander event 
 Parse the user's query to extract meeting details:
-Date: 22-06-2024
+Date: 02-07-2024
 Start time: Assume 10:00 AM UTC
 End time: 12:00 PM UTC (2 hours duration)
 Event title: "meetforfriends"

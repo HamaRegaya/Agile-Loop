@@ -18,11 +18,17 @@ from requests.auth import HTTPBasicAuth
 
 
 def process_spec_file(file_path: str = None, token: str = None, key: str = None, username: str = None):
-    with open(file_path) as f:
-        raw_api_spec = json.load(f)
+    with open(file_path, 'r', encoding='utf-8-sig') as f:
+            raw_api_spec = json.load(f)
 
     api_spec = reduce_openapi_spec(raw_api_spec, only_required=False)
 
+    if "zoho" in file_path:
+        headers = {
+            'Authorization': f'Zoho-oauthtoken {token}'
+        }
+        return api_spec, headers
+    
     if "trello" in file_path:
         params = {
             "key": key,

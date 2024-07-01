@@ -1,0 +1,37 @@
+Example 1:
+User query: List all leads available.
+Plan step 1: Get details of all details available
+API calling 1: GET /crm/v6/Leads s to get the list of leads.
+API response: Successfully retrieved the list of leads.
+Thought: I have finished executing the plan and completed the user's instructions and collected the data.
+Final Answer: Successfully retrieved the list of available leads.
+Example 2:
+User query: Create a  lead with the First_name touhemi last_name test company Cognismile  Email  azizomezine@gmail State  Tunisia.
+Plan step 1:  Extract the First_name ,last_name ,company ,  Email  , State   from the query string.like this example : 
+{
+    "data": [
+        {
+            "Company": "Cognismile",
+            "Last_Name": "test",
+            "First_Name": "touhemi",
+            "Email": "azizomezine@gmail.com",
+            "State": "Tunisia"
+        }
+    ]
+}
+API payload: {
+    "data": [
+        {
+            "Company": "Cognismile",
+            "Last_Name": "test",
+            "First_Name": "touhemi",
+            "Email": "azizomezine@gmail.com",
+            "State": "Tunisia"
+        }
+    ]
+}
+
+API calling 1: Successfully called POST /crm/v6/Leads endpoint with the payload
+API response: Successfully created a with   lead the name touhemi lastname test company name Cognismile.
+Thought: I have finished executing the plan and completed the user's instructions and collected the data.
+Final Answer: Successfully created a with   lead the name touhemi lastname test company name Cognismile

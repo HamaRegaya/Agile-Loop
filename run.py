@@ -8,10 +8,12 @@ from langchain_openai import AzureChatOpenAI
 from groq import Groq
 import json
 import ctypes
+from PyQt5.QtGui import QIcon
 import tkinter as tk
 import base64
 import requests
 from langchain_core.messages import HumanMessage
+from langchain_google_genai import ChatGoogleGenerativeAI
 # logger = logging.getLogger()
 try:
     ctypes.windll.shcore.SetProcessDpiAwareness(1)  # Make the application DPI aware
@@ -69,9 +71,53 @@ def write_tokens(access_token, refresh_token, config_file=config_file):
 
 def refresh_access_token(refresh_token):
     token_url = 'https://oauth2.googleapis.com/token'
+    config = yaml.load(open("yaml/config.yaml", "r"), Loader=yaml.FullLoader)
     params = {
-        'client_id': "201574979983-gm1stllchrhhh85eqmng8dnho2r0djj6.apps.googleusercontent.com",
-        'client_secret': "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",
+        'client_id': config["google_client_id"],
+        'client_secret': config["google_client_secret"],
+        'refresh_token': refresh_token,
+        'grant_type': 'refresh_token',
+    }
+    response = requests.post(token_url, data=params)
+    if response.status_code == 200:
+        new_access_token = response.json()['access_token']
+        return new_access_token
+    else:
+        raise Exception('Failed to refresh access token: {}'.format(response.content))
+
+
+    
+def get_access_token():
+    access_token, refresh_token = read_tokens()
+    # Optionally, check if the token is expired (implementation depends on your use case)
+    if is_token_expired(access_token):
+        access_token = refresh_access_token(refresh_token)
+        write_tokens(access_token, refresh_token)
+    return access_token
+#--------------------------------------------- ------------------------------------------------------------------------------------
+def is_token_expired(access_token):
+    
+        return True
+#--------------------------------------------- Zoho Token Handeling ------------------------------------------------------------
+def read_zoho_tokens(config_file=config_file):
+    with open(config_file, 'r') as file:
+        config = yaml.safe_load(file)
+    return config['zoho_token'], config['zoho_refresh_token']
+
+def write_zoho_tokens(access_token, refresh_token, config_file=config_file):
+    with open(config_file, 'r') as file:
+        config = yaml.safe_load(file)
+    config['zoho_token'] = access_token
+    config['zoho_refresh_token'] = refresh_token
+    with open(config_file, 'w') as file:
+        yaml.safe_dump(config, file)
+
+def refresh_zoho_access_token(refresh_token):
+    token_url = 'https://accounts.zoho.com/oauth/v2/token'
+    config = yaml.load(open("yaml/config.yaml", "r"), Loader=yaml.FullLoader)
+    params = {
+        'client_id': config["zoho_client_id"],
+        'client_secret': config["zoho_client_secret"],
         'refresh_token': refresh_token,
         'grant_type': 'refresh_token',
     }
@@ -83,26 +129,24 @@ def refresh_access_token(refresh_token):
         raise Exception('Failed to refresh access token: {}'.format(response.content))
 
 def is_token_expired(access_token):
-    
-        return True
-    
-def get_access_token():
-    access_token, refresh_token = read_tokens()
-    # Optionally, check if the token is expired (implementation depends on your use case)
+    # Dummy implementation. Replace with actual logic to check if token is expired.
+    return True
+
+def get_zoho_access_token():
+    access_token, refresh_token = read_zoho_tokens()
     if is_token_expired(access_token):
-        access_token = refresh_access_token(refresh_token)
-        write_tokens(access_token, refresh_token)
+        access_token = refresh_zoho_access_token(refresh_token)
+        write_zoho_tokens(access_token, refresh_token)
     return access_token
+
+
 #--------------------------------------------- ------------------------------------------------------------------------------------
-
-
-
 
 app = Flask(__name__)
 CORS(app)
 
 config = yaml.load(open("yaml/config.yaml", "r"), Loader=yaml.FullLoader)
-
+# os.environ["GOOGLE_API_KEY"] = config['Gemeni_API_KEY']
 client_voice = ElevenLabs(api_key=config['elevenlabs_api_key'])
 
 def text_to_speech_file(text: str) -> str:
@@ -143,8 +187,9 @@ def chat():
         handlers=[logging.StreamHandler(ColorPrint())],
     )
     logger.setLevel(logging.INFO)
+    
     client = Groq(
-        api_key="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",
+        api_key=config["GROQ_API_KEY"],
     )
     #user_input = simpledialog.askstring("Scenario Selection", "Please type your request ")
     
@@ -155,11 +200,11 @@ def chat():
     Don't provide any note or remark in the response. Only provide the extracted details in the JSON format.
     For each command, extract a list of the following details:
     - scenario: the application or platform mentioned in the input (e.g., "tmdb", "spotify", "stable", "calendar", "notion", "upclick",
-        "discord", "sheets", "trello", "jira", "salesforce", "google-meet" , "gmail", "docs")
+        "discord", "sheets", "trello", "jira", "salesforce", "google-meet" , "gmail", "docs" , "slides" , "zoho")
     - id: if the ID is not mentioned, default to 2
     - query: the action or command described by the user
     this is the list of the possible scenarios : ["tmdb", "spotify", "stable", "calendar", "notion", "upclick",
-        "discord", "sheets", "trello", "jira", "salesforce", "google-meet" , "gmail", "docs" , "slides"]
+        "discord", "sheets", "trello", "jira", "salesforce", "google-meet" , "gmail", "docs" , "slides", "zoho"]
     Return only the extracted details in the following JSON format take note that the listeScenario can contain only 1 or multiple Scenarios and cannot be empty:
     {
     "listeScenario": [
@@ -184,12 +229,12 @@ def chat():
     "listeScenario": [
         {
         "scenario": "Gmail",
-        "id": "2",
+        "id": "1",
         "query": "send an email to John containing 'hey how are you ?'"
         },
         {
         "scenario": "Trello",
-        "id": 2,
+        "id": 1,
         "query": "create a dashboard called 'board_vip'"
         }
     ]
@@ -315,6 +360,15 @@ def chat():
                     file_path="specs/slides_oas.json", token=os.environ["GOOGLE_TOKEN"]
                 )
                 query_example = 'Create a new slide with the title: "Hachicha". Print the complete api response result as it is.'
+            
+            elif scenario == "zoho":
+                access_token =  get_zoho_access_token()
+                os.environ["zoho_token"] = access_token
+
+                api_spec, headers = process_spec_file(
+                    file_path="specs/zoho_oas.json", token=os.environ["zoho_token"]
+                )
+                query_example = 'Zoho Create a lead with the First_name touhemi last_name test company Cognismile  Email  azizomezine@gmail State Tunisia'
             
             elif scenario == "gmail":
                 access_token = get_access_token()
@@ -501,6 +555,13 @@ def chat():
             # model="llama3-8b-8192",
             # api_key=config['GROQ_API_KEY'] # Optional if not set as an environment variable
             # )
+            
+            # llm = ChatGoogleGenerativeAI(
+            #     model = 'gemini-1.5-flash',
+            #     temperature=0        
+            # )
+            
+            
             llm = AzureChatOpenAI(
                 azure_deployment=config['azure_deployment'],
                 azure_endpoint=config['azure_endpoint'],
@@ -535,9 +596,13 @@ def chat():
                 api_version=config['api_version'],
                 temperature=0
             )
+            
+            # query_enhancer = ChatGoogleGenerativeAI(
+            #     model = 'gemini-1.5-flash',
+            #     temperature=0        
+            # )
 
             # query_to_enhance = f"you are an OPENAPI expert and you will enhance the original_query ,Keep every detail in the original_query and include the API s to use also make it suitable for an LLM to understand the tasks clearly. This is the original_query: {query}"
-
 
             # message = HumanMessage(
             #     content=query_to_enhance
@@ -569,15 +634,41 @@ def chat():
             logger.info(f"Execution Time: {time.time() - start_time}")
             
             #TO_DO sound notification
+            #  Try Catch TODO
             
-            response = "Done !"
+            # if output:
+            #     output_manager = f"""this is an output of an api call {output} tell me
+            #     what does it do without talking about JSON nor the scenarios and without talking about the code and dont say it s a set of instructions u will explain to peaple who does not understand any coding or api request make it short and simple 
+                
+            #     Example :
+            #     {
+            #         "listeScenario": [
+            #             {
+            #             "scenario": "docs",
+            #             "id": 2,
+            #             "query": "Create a new docs file with the title: 'Hachicha'. Print the complete api response result as it is and write in the document 'hello world'"
+            #             }
+            #         ]
+            #     }       
+            #     The response should be : a docs file with the title hachicha was created successfully and the insertion of hello world text was successful
+            #     """
+            #     output_manager_output = HumanMessage(
+            #         content=output_manager
+            #     )
+            #     output = query_enhancer.invoke([output_manager_output])
+            
+            #     response = f"{scenario} was Executed Successfully  "
+            #     response += output.content
+            # else:
+            response = f"{scenario} was Executed Successfully  "
+            # response += output
     except json.JSONDecodeError as e:
         response = output
 
 
-    # audio_file_path = text_to_speech_file(response)
-    # return jsonify({"response": response, "audio_file": os.path.basename(audio_file_path)})
-    return jsonify({"response": response, "audio_file": os.path.basename("C:\\Users\\hachichaMed\\Desktop\\Agile-Loop\\static\\message.mp3")})
+    audio_file_path = text_to_speech_file(response)
+    return jsonify({"response": response, "audio_file": os.path.basename(audio_file_path)})
+    # return jsonify({"response": response, "audio_file": os.path.basename("C:\\Users\\hachichaMed\\Desktop\\Agile-Loop\\static\\message.mp3")})
     
 
 
@@ -620,11 +711,11 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
 
-        self.setWindowTitle("Jarvis")
+        self.setWindowTitle("Ciri")
         self.setGeometry(100, 100, 1000, 800)  # Increased size to 1000x800
         self.center_window()
         self.webview = QWebEngineView()
-
+        self.setWindowIcon(QIcon('./assets/img/image.png'))
         base_dir = os.path.dirname(os.path.abspath(__file__))
         html_file = os.path.join(base_dir, 'index.html')
         file_url = QUrl.fromLocalFile(html_file)

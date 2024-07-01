@@ -95,7 +95,7 @@
                       "dateTime": {
                         "type": "string",
                         "format": "date-time",
-                        "example": "2024-06-21T10:00:00Z"
+                        "example": "2024-07-02T10:00:00Z"
                       },
                       "timeZone": {
                         "type": "string",
@@ -110,7 +110,7 @@
                       "dateTime": {
                         "type": "string",
                         "format": "date-time",
-                        "example": "2024-06-21T11:00:00Z"
+                        "example": "2024-07-02T11:00:00Z"
                       },
                       "timeZone": {
                         "type": "string",
@@ -153,11 +153,11 @@
                 "Create Event with Conference": {
                   "summary": "Team Meeting",
                   "start": {
-                    "dateTime": "2024-06-21T10:00:00Z",
+                    "dateTime": "2024-07-02T10:00:00Z",
                     "timeZone": "UTC"
                   },
                   "end": {
-                    "dateTime": "2024-06-21T11:00:00Z",
+                    "dateTime": "2024-07-02T11:00:00Z",
                     "timeZone": "UTC"
                   },
                   "conferenceData": {
@@ -430,7 +430,7 @@
                           "properties": {
                             "dateTime": {
                               "type": "string",
-                              "example": "2024-06-21T10:00:00Z"
+                              "example": "2024-07-02T10:00:00Z"
                             },
                             "timeZone": {
                               "type": "string",
@@ -443,7 +443,7 @@
                           "properties": {
                             "dateTime": {
                               "type": "string",
-                              "example": "2024-06-21T11:00:00Z"
+                              "example": "2024-07-02T11:00:00Z"
                             },
                             "timeZone": {
                               "type": "string",
@@ -485,11 +485,11 @@
                         "value": {
                           "summary": "Team Meeting",
                           "start": {
-                            "dateTime": "2024-06-21T10:00:00Z",
+                            "dateTime": "2024-07-02T10:00:00Z",
                             "timeZone": "UTC"
                           },
                           "end": {
-                            "dateTime": "2024-06-21T11:00:00Z",
+                            "dateTime": "2024-07-02T11:00:00Z",
                             "timeZone": "UTC"
                           },
                           "conferenceData": {
@@ -715,11 +715,11 @@
               "example": {
                 "summary": "Team Meeting",
                 "start": {
-                  "dateTime": "2024-06-21T10:00:00Z",
+                  "dateTime": "2024-07-02T10:00:00Z",
                   "timeZone": "UTC"
                 },
                 "end": {
-                  "dateTime": "2024-06-21T11:00:00Z",
+                  "dateTime": "2024-07-02T11:00:00Z",
                   "timeZone": "UTC"
                 },
                 "conferenceData": {
