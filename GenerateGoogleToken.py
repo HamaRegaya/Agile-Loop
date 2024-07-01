@@ -7,17 +7,57 @@ import googleapiclient.errors
 
 os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 
-CLIENT_SECRETS_FILE = "client_secret.json"
+CLIENT_SECRETS_FILE ="client_secret.json"
 
 SCOPES = [
-    "https://www.googleapis.com/auth/drive.metadata.readonly",
-    "https://www.googleapis.com/auth/calendar",
-    "https://www.googleapis.com/auth/drive",
-    "https://mail.google.com/",
-    "https://www.googleapis.com/auth/spreadsheets.readonly",
-    "https://www.googleapis.com/auth/gmail.modify",
-    "https://www.googleapis.com/auth/calendar.readonly",
-    "https://www.googleapis.com/auth/spreadsheets"
+   "https://www.googleapis.com/auth/meetings.media.readonly"
+    ,"https://www.googleapis.com/auth/drive.readonly"
+    ,"https://www.googleapis.com/auth/documents.readonly"
+    ,"https://www.googleapis.com/auth/calendar.events.owned.readonly"
+    ,"https://www.googleapis.com/auth/calendar.app.created"
+    ,"https://www.googleapis.com/auth/calendar.events.readonly"
+    ,"https://www.googleapis.com/auth/gmail.modify"
+    ,"https://www.googleapis.com/auth/gmail.settings.basic"
+    ,"https://www.googleapis.com/auth/calendar.calendarlist"
+    ,"https://www.googleapis.com/auth/spreadsheets.readonly"
+    ,"https://www.googleapis.com/auth/calendar"
+    ,"https://www.googleapis.com/auth/spreadsheets"
+    ,"https://www.googleapis.com/auth/drive"
+    ,"https://mail.google.com/"
+    ,"https://www.googleapis.com/auth/calendar.events.public.readonly"
+    ,"https://www.googleapis.com/auth/calendar.events.owned"
+    ,"https://www.googleapis.com/auth/drive.file"
+    ,"https://www.googleapis.com/auth/calendar.calendarlist.readonly"
+    ,"https://www.googleapis.com/auth/meetings.space.created"
+    ,"https://www.googleapis.com/auth/calendar.acls.readonly"
+    ,"https://www.googleapis.com/auth/documents"
+    ,"https://www.googleapis.com/auth/gmail.addons.current.message.readonly"
+    ,"https://www.googleapis.com/auth/gmail.labels"
+    ,"https://www.googleapis.com/auth/calendar.freebusy"
+    ,"https://www.googleapis.com/auth/gmail.addons.current.action.compose"
+    ,"https://www.googleapis.com/auth/gmail.addons.current.message.action"
+    ,"https://www.googleapis.com/auth/gmail.compose"
+    ,"https://www.googleapis.com/auth/meetings.media.audio.readonly"
+    ,"https://www.googleapis.com/auth/meetings.media.video.readonly"
+    ,"https://www.googleapis.com/auth/calendar.readonly"
+    ,"https://www.googleapis.com/auth/calendar.settings.readonly"
+    ,"https://www.googleapis.com/auth/calendar.calendars"
+    ,"https://www.googleapis.com/auth/gmail.send"
+    ,"https://www.googleapis.com/auth/calendar.events"
+    ,"https://www.googleapis.com/auth/gmail.metadata"
+    ,"https://www.googleapis.com/auth/drive.metadata.readonly"
+    ,"https://www.googleapis.com/auth/gmail.settings.sharing"
+    ,"https://www.googleapis.com/auth/gmail.insert"
+    ,"https://www.googleapis.com/auth/meetings.space.readonly"
+    ,"https://www.googleapis.com/auth/calendar.acls"
+    ,"https://www.googleapis.com/auth/calendar.events.freebusy"
+    ,"https://www.googleapis.com/auth/gmail.addons.current.message.metadata"
+    ,"https://www.googleapis.com/auth/gmail.readonly"
+    ,"https://www.googleapis.com/auth/docs"
+    ,"https://www.googleapis.com/auth/calendar.calendars.readonly"
+    ,"https://www.googleapis.com/auth/presentations"
+    ,"https://www.googleapis.com/auth/presentations.readonly"
+    
 ]
 
 app = flask.Flask(__name__)
@@ -35,7 +75,9 @@ def authorize():
     flow.redirect_uri = flask.url_for('oauth2callback', _external=True)
     authorization_url, state = flow.authorization_url(
         access_type='offline',
-        include_granted_scopes='true')
+        include_granted_scopes='true',
+        prompt='consent'  # Force prompt to ensure refresh token is provided
+    )
     flask.session['state'] = state
     return flask.redirect(authorization_url)
 
@@ -43,7 +85,7 @@ def authorize():
 def oauth2callback():
     state = flask.session.get('state')
     if not state:
-        return "State not found in session. Please try the authorization flow again."
+        return"State not found in session. Please try the authorization flow again."
 
     flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(
         CLIENT_SECRETS_FILE, scopes=SCOPES, state=state)
@@ -63,7 +105,7 @@ def drive_files():
     Access Token: {credentials.token}<br>
     Refresh Token: {credentials.refresh_token}<br>
     Token Expiry: {credentials.expiry}<br>
-    """
+   """
     
     drive_service = googleapiclient.discovery.build('drive', 'v3', credentials=credentials)
     results = drive_service.files().list(
